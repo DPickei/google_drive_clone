@@ -8,8 +8,8 @@ jobs:
               run: npm install -g pnpm && pnpm install
     
             - name: Copy .env.example files
-              shell: powershell
-              run: Get-ChildItem -Recurse -Filter ".env.example" | ForEach-Object { Copy-Item $_.FullName ($_.FullName -replace '\.example$','') }
+              shell: bash
+              run: find . -type f -name ".env.example" -exec sh -c 'cp "$1" "${1%.example}"' _ {} \;
         
             - name: Typecheck
               run: pnpm typecheck

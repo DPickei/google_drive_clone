@@ -1,0 +1,18 @@
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install Dependencies
+              run: npm install -g pnpm && pnpm install
+    
+            - name: Copy .env.example files
+              shell: powershell
+              run: Get-ChildItem -Recurse -Filter ".env.example" | ForEach-Object { Copy-Item $_.FullName ($_.FullName -replace '\.example$','') }
+        
+            - name: Typecheck
+              run: pnpm typecheck
+        
+            - name: Lint
+              run: pnpm lint
